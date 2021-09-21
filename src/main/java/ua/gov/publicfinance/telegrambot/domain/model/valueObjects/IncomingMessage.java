@@ -10,14 +10,23 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "INCOMING_MASSAGE")
+@Table(name = "incomming_message")
 public class IncomingMessage {
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column( name = "tg_message_id" )
+    private long tgMessageId;
 
-    @Column(name = "MASSAGE_CONTENT", nullable = false)
-    private String massageContent;
+    @Column(name = "date", nullable = false)
+    private long date;
+
+    @Column(name = "edit_date", nullable = false)
+    private long editDate;
+
+    @Column(name = "text", nullable = false)
+    private String text;
+
 }

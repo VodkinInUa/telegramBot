@@ -4,21 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 
-@NoArgsConstructor
-@Getter
-@Setter
-@Entity
-@Table(name = "CHAT_ID")
+@Embeddable
 public class ChatID {
 
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long chat_id;
 
-    @Column(name = "CHAT_ID", nullable = false)
-    private int chat_id;
-
+    public void setChatId(long id) {
+        chat_id = id;
+    }
 }
