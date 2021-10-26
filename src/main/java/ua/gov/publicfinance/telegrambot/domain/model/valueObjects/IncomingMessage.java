@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "incomming_message")
+@Table(name = "incoming_message")
 public class IncomingMessage {
     @Id
     @Column(name = "id")
@@ -18,7 +18,7 @@ public class IncomingMessage {
     private long id;
 
     @Column( name = "tg_message_id" )
-    private long tgMessageId;
+    private int tgMessageId;
 
     @Column(name = "date", nullable = false)
     private long date;
