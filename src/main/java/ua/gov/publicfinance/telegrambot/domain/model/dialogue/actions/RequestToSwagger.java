@@ -5,9 +5,9 @@ import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.sql.Array;
+import java.util.*;
 
 public class RequestToSwagger {
 
@@ -21,9 +21,11 @@ public class RequestToSwagger {
     }
     public static String putDisposerStates(String edrpou) throws Exception {
         String url = "/spending/disposer/states";
-        Map<String, Object> uriVariables=new HashMap<>();
-        uriVariables.put("edrpous",edrpou);
-        return sendGet1(url, new HashMap<String, Object>());
+        Map<String, ArrayList> uriVariables=new HashMap<>();
+        ArrayList<String> edrpousArray = new ArrayList<>();
+        edrpousArray.add(edrpou);
+        uriVariables.put("edrpous",edrpousArray);
+        return sendGet1(url, new HashMap<String, ArrayList>());
     }
     public static String getTop10Recipients(String kpk) throws Exception {
         String url = "/spending/top10/recipients?kpk={kpk}&year={year}";
@@ -38,25 +40,41 @@ public class RequestToSwagger {
 
         String url = String.format("http://%s%s", host, path);
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-        //headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
-        //headers.setContentType(MediaType.APPLICATION_JSON);
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("kpk", "3511350");
-        params.put("year","2020");
+        //headers.setset("Accept", MediaType.APPLICATION_JSON_VALUE);
+        headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+//        Map<String, String> params = new HashMap<String, String>();
+//        params.put("kpk", "3511350");
+//        params.put("year","2020");
 
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<?> httpEntity  = new HttpEntity<>(headers);
 
-        ResponseEntity result = restTemplate.exchange(url, HttpMethod.GET,httpEntity, String.class, params);
+        ResponseEntity result = restTemplate.exchange(url, HttpMethod.POST,httpEntity, String.class, uriVariables);
 
-        return result.toString();
+        ArrayList<String> edrpousArray = new ArrayList<>();
+        edrpousArray.add("41242590");
+        //EdrpouRequest edrpouRequest=new EdrpouRequest(edrpousArray);
+        return result.getBody().toString();
+        //return ResponseEntity.created(url,uriVariables);
 
 
     }
     private class EdrpouRequest{
+        ArrayList edrpous;
 
+        public EdrpouRequest() {
+            this.edrpous = edrpous;
+        }
+
+        public ArrayList getEdrpous() {
+            return edrpous;
+        }
+
+        public void setEdrpous(ArrayList edrpous) {
+            this.edrpous = edrpous;
+        }
     }
     private static String sendGet(String path, Map<String, ?> uriVariables) throws Exception {
 

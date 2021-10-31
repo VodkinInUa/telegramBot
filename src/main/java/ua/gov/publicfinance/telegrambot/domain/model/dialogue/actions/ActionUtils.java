@@ -25,7 +25,7 @@ public final class ActionUtils {
     public static String consumeRestApi(String url) {
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String result = restTemplate.getForObject(url, String.class);
+            String result = restTemplate.getForObject(url, OrganizationInfoDTO.class).toString();
             return result;
         } catch (HttpStatusCodeException ex) {
             return ex.getResponseBodyAsString();

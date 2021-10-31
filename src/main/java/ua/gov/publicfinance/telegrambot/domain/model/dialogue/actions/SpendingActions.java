@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.statemachine.StateContext;
@@ -12,6 +15,7 @@ import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.guard.Guard;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Mono;
@@ -20,7 +24,9 @@ import ua.gov.publicfinance.telegrambot.domain.model.dialogue.Events;
 import ua.gov.publicfinance.telegrambot.domain.model.dialogue.States;
 import ua.gov.publicfinance.telegrambot.domain.model.events.EventFromDialogueStateMachine;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -49,6 +55,34 @@ public abstract class SpendingActions extends EnumStateMachineConfigurerAdapter<
             }
         };
     }
+    private class EdrpouRequest{
+        ArrayList edrpous;
+
+        public EdrpouRequest() {
+        }
+
+        public ArrayList getEdrpous() {
+            return edrpous;
+        }
+
+        public void setEdrpous(ArrayList edrpous) {
+            this.edrpous = edrpous;
+        }
+
+
+    }
+
+    @PostMapping(
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> postBody(EdrpouRequest edrpouRequest){
+
+        ResponseEntity responseEntity=ResponseEntity
+                .created(URI.create("http://chat-bot.openbudget.gov.ua/spending/disposer/states"))
+                .body(edrpouRequest);
+
+        return responseEntity;
+    }
     @Bean
     public Action<States, Events> requestAction() {
         return new Action<States, Events>() {
@@ -66,6 +100,17 @@ public abstract class SpendingActions extends EnumStateMachineConfigurerAdapter<
                 //String result = RequestToSwagger.getDisposer(edrpou);// consumeRestApi(url);
                 //String result = RequestToSwagger.getTop10Recipients(edrpou);// consumeRestApi(url);
                 //String result = RequestToSwagger.putDisposerStates(edrpou);// consumeRestApi(url); 41242590
+
+//                ArrayList<String> edrpousArray = new ArrayList<>();
+//                edrpousArray.add(edrpou);
+//
+//                EdrpouRequest edrpouRequest=new EdrpouRequest();
+//                edrpouRequest.setEdrpous(edrpousArray);
+//
+//                String result = ResponseEntity.created(URI.create("http://chat-bot.openbudget.gov.ua/spending/disposer/states"))
+//                        .headers(new HttpHeaders().setAccept(Arrays.asList(new MediaType[]{MediaType.APPLICATION_JSON})))
+//                        .
+//                                        .body(edrpouRequest).toString();
 
                 eventFromDialogueStateMachine.setText(result);
                 publishEvent();
