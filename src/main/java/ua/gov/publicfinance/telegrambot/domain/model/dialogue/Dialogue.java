@@ -1,48 +1,74 @@
 package ua.gov.publicfinance.telegrambot.domain.model.dialogue;
 
+import ua.gov.publicfinance.telegrambot.domain.model.dialogue.stateconfig.StateConfigMap;
+import ua.gov.publicfinance.telegrambot.domain.model.events.EventToDialogueStateMachine;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.service.StateMachineService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import reactor.core.publisher.Mono;
-import ua.gov.publicfinance.telegrambot.domain.model.events.EventToDialogueStateMachine;
 
 @Component
 public class Dialogue implements ApplicationListener<EventToDialogueStateMachine> {
 
     @Autowired
-    private StateMachineService<States,Events> stateMachineService;
+    private StateMachineService<String,String> stateMachineService;
 
-    private StateMachine<States,Events> sm;
+    private StateMachine<String,String> currentStateMachine;
 
+    @SneakyThrows
     @Override
     public void onApplicationEvent(EventToDialogueStateMachine event) {
         String chatId=event.getChatId();
         String text=event.getText();
-        sm = stateMachineService.acquireStateMachine(chatId);
-        System.out.println("++++++++++Dialogue.message++++++++++");
-        System.out.println(sm.getExtendedState());
-        System.out.println(text);
-
+        currentStateMachine = getStateMachine(chatId);
+//        currentStateMachine = stateMachineService.acquireStateMachine(chatId);
         try {
-            Events events = Events.valueOf(text);
-            Message<Events> eventMessage = MessageBuilder
-                    .withPayload(events)
-                    .setHeader("header_key", "header_value")
+            String button = convertEventButtonToEventStateMachine(text);
+            //todo переделать
+            if (button==text){throw new Exception();}
+            Message<String> eventMessage = MessageBuilder
+                    .withPayload(button)
+                    .setHeader("header_key", button)
                     .build();
-            sm.sendEvent(Mono.just(eventMessage)).subscribe();
+            currentStateMachine.sendEvent(Mono.just(eventMessage)).blockLast();
             System.out.println("Sending message to sm " + eventMessage.toString());
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-            Message<Events> eventMessage = MessageBuilder
-                    .withPayload(Events.SAY)
+            Message<String> eventMessage = MessageBuilder
+                    .withPayload("SAY")
                     .setHeader("text", text)
                     .build();
-            sm.sendEvent(Mono.just(eventMessage)).subscribe();
-            System.out.println("Sending message to sm " + eventMessage.toString());
+            currentStateMachine.sendEvent(Mono.just(eventMessage)).subscribe();
         }
+    }
+
+    private String convertEventButtonToEventStateMachine(String eventButton) {
+        StateConfigMap.map.containsKey(eventButton);
+
+        for (StateConfig stateConfig : StateConfigMap.map.values()) {
+            if (stateConfig.button.equals(eventButton)){
+
+                return stateConfig.transitionTargetStateEvent;
+            }
+        }
+        return eventButton;
+    }
+    private synchronized StateMachine<String, String> getStateMachine(String machineId){
+        if (currentStateMachine == null) {
+            currentStateMachine = stateMachineService.acquireStateMachine(machineId, false);
+            currentStateMachine.startReactively().block();
+        } else if (!ObjectUtils.nullSafeEquals(currentStateMachine.getId(), machineId)) {
+            stateMachineService.releaseStateMachine(currentStateMachine.getId());
+            currentStateMachine.stopReactively().block();
+            currentStateMachine = stateMachineService.acquireStateMachine(machineId, false);
+            currentStateMachine.startReactively().block();
+        }
+        return currentStateMachine;
     }
 }

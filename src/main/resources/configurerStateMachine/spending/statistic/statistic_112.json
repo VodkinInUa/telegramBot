@@ -1,0 +1,37 @@
+[
+  {
+    "@id": "112",
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryState",
+    "initial": false,
+    "state": "STATISTIC_112",
+    "entryActions": ["-2"]
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "11",
+    "target": "112",
+    "event": "TO_STATISTIC_112",
+    "kind": "EXTERNAL"
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "112",
+    "target": "1",
+    "event": "TO_HOME",
+    "kind": "EXTERNAL"
+  },
+  {
+    "config": {
+      "STATISTIC_112": {
+        "transitionTargetState": "STATISTIC_112",
+        "transitionTargetStateEvent": "TO_STATISTIC_112",
+        "messages": {
+          "onEnter": "Оберіть необхідний розділ",
+          "onError": "Error"
+        },
+        "button": "Статистика по витратам/надходженням"
+      }
+    }
+  }
+
+]

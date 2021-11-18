@@ -1,0 +1,27 @@
+[
+  {
+    "@id": "1",
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryState",
+    "initial": true,
+    "state": "HOME",
+    "initialAction": "-1",
+    "entryActions": [
+      "-2"
+    ]
+  },
+
+  {
+    "config": {
+      "HOME": {
+        "transitionTargetState": "HOME",
+        "transitionTargetStateEvent": "TO_HOME",
+        "messages": {
+          "onEnter": "Оберіть необхідний розділ",
+          "onError": "Error"
+        },
+        "button": "На головну"
+      }
+    }
+  }
+
+]

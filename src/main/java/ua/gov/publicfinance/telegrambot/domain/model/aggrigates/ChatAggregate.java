@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import ua.gov.publicfinance.telegrambot.application.internal.events.PushMessage;
 import ua.gov.publicfinance.telegrambot.domain.model.commands.IncomingMessageCommand;
 import ua.gov.publicfinance.telegrambot.domain.model.dialogue.Dialogue;
-import ua.gov.publicfinance.telegrambot.domain.model.dialogue.Events;
+//import ua.gov.publicfinance.telegrambot.domain.model.dialogue.Events;
 import ua.gov.publicfinance.telegrambot.domain.model.events.EventFromDialogueStateMachine;
 import ua.gov.publicfinance.telegrambot.domain.model.events.EventToDialogueStateMachine;
 import ua.gov.publicfinance.telegrambot.domain.model.valueObjects.IncomingMessage;
@@ -45,8 +45,8 @@ public class ChatAggregate implements ApplicationListener<ApplicationEvent>{
         else if (event instanceof EventFromDialogueStateMachine) {
             String messageText = ((EventFromDialogueStateMachine) event).getText();
             long chatId = ((EventFromDialogueStateMachine) event).getChatId();
-            Collection<Events> availableEvents = ((EventFromDialogueStateMachine) event).getAvailableEvents();
-            PushMessage pushMessage = new PushMessage(this, messageText, chatId, availableEvents);
+            Collection<String> availableButtons = ((EventFromDialogueStateMachine) event).getAvailableButtonsFromTargetStates();
+            PushMessage pushMessage = new PushMessage(this, messageText, chatId, availableButtons);
             applicationEventPublisher.publishEvent(pushMessage);
         }
     }

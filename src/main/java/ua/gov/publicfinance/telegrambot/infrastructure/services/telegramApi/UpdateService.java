@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import ua.gov.publicfinance.telegrambot.application.internal.events.PushMessage;
 import ua.gov.publicfinance.telegrambot.application.internal.events.NewMessage;
-import ua.gov.publicfinance.telegrambot.domain.model.dialogue.Events;
+//import ua.gov.publicfinance.telegrambot.domain.model.dialogue.Events;
 
 import java.io.IOException;
 import java.util.*;
@@ -32,26 +32,26 @@ public class UpdateService extends TelegramApi implements ApplicationListener<Pu
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             final String text = update.getMessage().getText();
-            String text1;
-            try {
-                text1 = Arrays.stream(Events.values())
-//                        .map(s-> {
-//                            System.out.print(s.getValue());
-//                            return (s.getValue()==null)?s.getValue():s.name();})
-                        .filter((t) -> {
-                            System.out.println("\t"+t.getValue());
-                            return t.getValue().startsWith(text);})
-                        .findFirst()
-                        .get().name();
-            }
-            catch (NoSuchElementException | NullPointerException e){
-                text1=text;
-                System.out.println(e);
-            }
-            System.out.println("==============="+text1);
+//            String text1;
+//            try {
+//                text1 = Arrays.stream(Events.values())
+////                        .map(s-> {
+////                            System.out.print(s.getValue());
+////                            return (s.getValue()==null)?s.getValue():s.name();})
+//                        .filter((t) -> {
+//                            System.out.println("\t"+t.getValue());
+//                            return t.getValue().startsWith(text);})
+//                        .findFirst()
+//                        .get().name();
+//            }
+//            catch (NoSuchElementException | NullPointerException e){
+//                text1=text;
+//                System.out.println(e);
+//            }
+//            System.out.println("==============="+text1);
             final long chatId = update.getMessage().getChatId();
             final int tgMassageId = update.getMessage().getMessageId();
-            NewMessage incomingMessage = new NewMessage(this, text1, chatId, tgMassageId);
+            NewMessage incomingMessage = new NewMessage(this, text, chatId, tgMassageId);
            // ApplicationEventPublisher publisher = getPublisher();
             applicationEventPublisher.publishEvent(incomingMessage);
         }
@@ -77,7 +77,7 @@ public class UpdateService extends TelegramApi implements ApplicationListener<Pu
         msg.setText(text);
 
         if ( ! eventPushMessage.getAvailableEvents().isEmpty() ) {
-            Collection<Events> events = eventPushMessage.getAvailableEvents();
+            Collection<String> events = eventPushMessage.getAvailableEvents();
 
             ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
             replyKeyboardMarkup.setSelective(true);
@@ -86,8 +86,8 @@ public class UpdateService extends TelegramApi implements ApplicationListener<Pu
             List<KeyboardRow> keyboard = new ArrayList<>();
             KeyboardRow keyboardFirstRow = new KeyboardRow();
             System.out.println(events);
-            for (Events item : events) {
-                keyboardFirstRow.add((item.getValue()!=null||item.getValue()!="")?item.getValue():item.name());
+            for (String item : events) {
+                keyboardFirstRow.add(item);
             }
             keyboard.add(keyboardFirstRow);
             replyKeyboardMarkup.setKeyboard(keyboard);

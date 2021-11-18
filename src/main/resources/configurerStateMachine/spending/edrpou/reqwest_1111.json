@@ -1,0 +1,43 @@
+[
+  {
+    "@id": "1111",
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryState",
+    "initial": false,
+    "state": "REQUEST_1111",
+    "entryActions": ["-4"]
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "111",
+    "target": "1111",
+    "kind": "LOCAL",
+    "event": "SAY",
+    "actions": ["-2"]
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "1111",
+    "target": "1",
+    "event": "TO_HOME",
+    "kind": "EXTERNAL"
+  },
+  {
+    "config": {
+      "REQUEST_1111": {
+        "transitionTargetState": "REQUEST_1111",
+        "transitionTargetStateEvent": "SAY",
+        "messages": {
+          "onEnter": "Відправляємо запит …",
+          "onError": "Error"
+        },
+        "request": {
+          "classModelString": "ua.gov.publicfinance.telegrambot.domain.model.dialogue.apiclient.api.SpendingBotApi",
+          "method": "getDisposerUsingGET",
+          "expressionString": "'<b>Код за ЄДРПОУ</b>  -  ' + edrpou + '\n<b>Категорія суб''єкта</b>  -  ' + orgType + '\n<b>Код за КОПФГ</b>  -  ' + kopfg + ' - ' + orgForm +'\n<b>Код за КВЕД (основний)</b>  -  ' + kved + ' - ' + kvedName + '\n<b>Код за КОАТУУ</b>  -  ' + koatuu + '\n<b>Місцезнаходження</b>  -  ' + address + '\n<b>Керівник</b>  -  ' + director + '\n<b>Кабінет</b>  -  ' + state"
+        },
+        "button": "REQUEST_1111"
+      }
+    }
+  }
+
+]

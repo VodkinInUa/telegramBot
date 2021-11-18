@@ -1,0 +1,36 @@
+[
+  {
+    "@id": "11",
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryState",
+    "initial": false,
+    "state": "SPENDING_11",
+    "entryActions": ["-2"]
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "1",
+    "target": "11",
+    "event": "TO_SPENDING_11",
+    "kind": "EXTERNAL"
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "11",
+    "target": "1",
+    "event": "TO_HOME",
+    "kind": "EXTERNAL"
+  },
+  {
+    "config": {
+      "SPENDING_11": {
+        "transitionTargetState": "SPENDING_11",
+        "transitionTargetStateEvent": "TO_SPENDING_11",
+        "messages": {
+          "onEnter": "Оберіть необхідний розділ",
+          "onError": "Error"
+        },
+        "button": "Публічні кошти"
+      }
+    }
+  }
+]

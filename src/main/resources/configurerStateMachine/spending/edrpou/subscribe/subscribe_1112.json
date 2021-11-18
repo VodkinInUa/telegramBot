@@ -1,0 +1,44 @@
+[
+  {
+    "@id": "1112",
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryState",
+    "initial": false,
+    "state": "SUBSCRIBE_1112",
+    "entryActions": ["-2"]
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "111",
+    "target": "1112",
+    "event": "TO_SUBSCRIBE_1112",
+    "kind": "EXTERNAL"
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "1111",
+    "target": "1112",
+    "event": "TO_SUBSCRIBE_1112",
+    "kind": "EXTERNAL"
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "1112",
+    "target": "1",
+    "event": "TO_HOME",
+    "kind": "EXTERNAL"
+  },
+  {
+    "config": {
+      "SUBSCRIBE_1112": {
+        "transitionTargetState": "SUBSCRIBE_1112",
+        "transitionTargetStateEvent": "TO_SUBSCRIBE_1112",
+        "messages": {
+          "onEnter": "Оберіть параметри оновлення",
+          "onError": "Error"
+        },
+        "button": "Підписатися на організацію"
+      }
+    }
+  }
+
+]

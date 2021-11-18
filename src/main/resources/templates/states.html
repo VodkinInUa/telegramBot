@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+	<title>Spring Statemachine Demo</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div>
+		<a href="/h2-console" target="_blank">h2 console</a>
+	</div>
+	<!--/*@thymesVar id="model" type="java"*/-->
+	<div>
+		<form action="#" data-th-action="@{/state}" data-th-object="${model}" method="post">
+
+			<div>
+				<p th:text="'Choose events'"/>
+				<ul>
+					<li th:each="ty : ${allEvents1}">
+						<button type="submit" name="events1" th:value="${ty}"  th:text="${ty}"></button>
+
+					</li>
+				</ul>
+			</div>
+			<input type="text" name="inputText1"/>
+			<button type="submit">Send Events</button>
+		</form>
+		<div>
+			<textarea th:text="${messages1}" rows="20" cols="70"/>
+		</div>
+	</div>
+
+	<div>
+		<form action="#" data-th-action="@{/state}" method="get">
+			<button type="submit">Refresh</button>
+		</form>
+	</div>
+</body>
+</html>

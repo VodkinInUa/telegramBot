@@ -1,0 +1,23 @@
+[
+  {
+    "@id": "-1",
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryAction",
+    "name": "firstInitialAction"
+  },
+  {
+    "@id": "-2",
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryAction",
+    "name": "enterAction"
+  },
+  {
+    "@id": "-3",
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryAction",
+    "name": "inputCodeAction"
+  },
+  {
+    "@id": "-4",
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryAction",
+    "name": "requestAction"
+  }
+
+]

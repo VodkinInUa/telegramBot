@@ -1,0 +1,37 @@
+[
+  {
+    "@id": "111",
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryState",
+    "initial": false,
+    "state": "EIDRPOU_111",
+    "entryActions": ["-2"]
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "11",
+    "target": "111",
+    "event": "TO_EIDRPOU_111",
+    "kind": "EXTERNAL"
+  },
+  {
+    "_class": "org.springframework.statemachine.data.jpa.JpaRepositoryTransition",
+    "source": "111",
+    "target": "1",
+    "event": "TO_HOME",
+    "kind": "EXTERNAL"
+  },
+  {
+    "config": {
+      "EIDRPOU_111": {
+        "transitionTargetState": "EIDRPOU_111",
+        "transitionTargetStateEvent": "TO_EIDRPOU_111",
+        "messages": {
+          "onEnter": "Введіть ЕДРПОУ",
+          "onError": "Error"
+        },
+        "button": "Пошук за ЄДРПОУ"
+      }
+    }
+  }
+
+]
